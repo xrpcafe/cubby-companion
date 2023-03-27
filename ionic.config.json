@@ -1,0 +1,7 @@
+{
+  "name": "cafe companion",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
