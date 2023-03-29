@@ -262,15 +262,23 @@ async function addAccountSecretNumbers() {
 
   async function confirmBulkTransaction(transactions: string) {
     try
-    {
-      const decodedText = decrypt(seedEncrypted, pw);
-      let wallet = Wallet.fromSeed(decodedText);
+    {   let decodedText = '';
+        let wallet = null;
+      try{
+        decodedText = decrypt(seedEncrypted, pw);
+        wallet = Wallet.fromSeed(decodedText);
+      } catch(err) {
+        invokeNotification("Invalid password")
+        return;
+      }
+      setConfirmBulkSpinner(true)
+      setpw("");
 
       let signedTransactions = await signer.signTransactions(
         transactions,
         decodedText
       );
-      setConfirmBulkSpinner(true)
+      setCurrentTransactionText("");
       let response = await apiServices.submitTransactions(
         wallet.address,
         signedTransactions,
@@ -284,12 +292,12 @@ async function addAccountSecretNumbers() {
 
     } catch(err)
     {
+      setCurrentTransactionText("");
+      setpw("");
+      setCurrentTransactionId("");
       invokeNotification("An Error has occurred")
       refresh()
     }
-    setpw("");
-    setCurrentTransactionText("");
-    setCurrentTransactionId("");
   }
 
   async function fetchBulkStatus(id: number)
@@ -312,12 +320,14 @@ async function addAccountSecretNumbers() {
                       setConfirmBulkTxn(false)
                       setConfirmBulkSpinner(false)
                       invokeNotification('Sweep has been executed successfully')
+                      setCurrentTransactionId("");
                       refresh()
                       resolve(true)
                   } else {
                     setConfirmBulkTxn(false)
                     setConfirmBulkSpinner(false)
                     invokeNotification('Error: ' + bulkStatus.data[0].result)
+                    setCurrentTransactionId("");
                     refresh()
                     resolve(true)
                   }
@@ -372,6 +382,7 @@ async function addAccountSecretNumbers() {
                     type="password"
                     onChange={handlepwChange}
                     className="input"
+                    value={pw}
                   />
                 </div>
               </div>
