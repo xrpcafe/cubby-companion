@@ -1,0 +1,125 @@
+.xroyalty .title, .xroyalty .subtitle2 {
+  text-shadow: 0 0 5px rgb(253, 224, 0);
+  color: #fff5bb;
+  margin: 1rem 2rem;
+}
+.xroyalty .title {
+  margin-top: 2rem;
+}
+.xroyalty .title-card {
+  background: rgba(0, 0, 0, 0.3);
+  text-align: center;
+  border-radius: 1rem;
+}
+
+.xroyalty .base {
+  position: relative;
+  max-width: 460px;
+  max-height: 25rem;
+  animation: group 6s ease forwards;
+}
+.xroyalty .base img {
+  display: block;
+}
+.xroyalty .base img:last-child {
+  position: absolute;
+  animation: king 23s ease forwards;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: -1;
+}
+.xroyalty .base img:first-child {
+  transform: rotateY(180deg);
+  margin-right: 13rem;
+  animation: queen 23s ease forwards;
+}
+
+@media only screen and (min-width: 768px) {
+  .xroyalty .base img:last-child {
+    left: 70%;
+  }
+}
+@keyframes king {
+  0% {
+    filter: blur(1px) brightness(0.8);
+  }
+  50% {
+    filter: blur();
+  }
+  100% {
+    filter: blur(1px) brightness(0.8);
+  }
+}
+@keyframes queen {
+  0% {
+    filter: blur();
+  }
+  50% {
+    filter: blur(1px) brightness(0.8);
+  }
+  100% {
+    filter: blur();
+  }
+}
+@keyframes group {
+  0% {
+    filter: brightness(0.1);
+  }
+  100% {
+    opacity: 1;
+    filter: brightness(1);
+  }
+}
+.hero.xroyalty {
+  background: linear-gradient(-45deg, #9b462c, #6b2323, #1a5c73, #128469);
+  background-size: 400% 400%;
+  animation: gradient 25s ease infinite;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+@media only screen and (max-width: 768px) {
+  .xroyalty .buttonsXRoyalty {
+    position: absolute;
+    bottom: 0;
+    z-index: 1;
+    width: 100%;
+  }
+  .xroyalty .base img {
+    transform: scale(0.2);
+  }
+  .xroyalty .button {
+    width: 100%;
+  }
+  .xroyalty .container {
+    overflow: hidden;
+    border-radius: 0.5rem;
+  }
+}
+@media only screen and (min-width: 768px) {
+  .xroyalty .base {
+    bottom: -3.7rem;
+  }
+  .xroyalty .base img:first-child {
+    margin-left: -12%;
+  }
+  .hero h2.subtitle2 {
+    margin-bottom: 0;
+  }
+  .buttonsXRoyalty {
+    justify-content: center;
+    transform: translateY(1.5rem);
+  }
+}
+
+/*# sourceMappingURL=custom.css.map */
