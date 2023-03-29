@@ -19,7 +19,7 @@ const config: CapacitorConfig = {
       useDialog: true,
     },
   },
-  appId: 'io.ionic.starter',
+  appId: 'cubby.xrp.cafe',
   appName: 'cafe companion',
   webDir: 'build',
   bundledWebRuntime: false

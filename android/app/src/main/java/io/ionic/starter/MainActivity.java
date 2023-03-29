@@ -1,4 +1,4 @@
-package io.ionic.starter;
+package cubby.xrp.cafe;
 
 import com.getcapacitor.BridgeActivity;
 
