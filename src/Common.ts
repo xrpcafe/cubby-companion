@@ -14,8 +14,6 @@ const countArrayItems = (json: string) => {
         {
             total = total + Number(obj[i].Amount);
         }
-        console.log(total)
-        console.log(total / 1000000)
         return (total / 1000000).toFixed(2)
     } catch (error) {
       console.log(error)
@@ -24,7 +22,6 @@ const countArrayItems = (json: string) => {
 
   function SplitTime(dt:string){
     try{ 
-        console.log(new Date(dt))
         let numberOfMins = new Date(dt).getMinutes();
         let delta = new Date().getMinutes() - numberOfMins;
   

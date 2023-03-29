@@ -222,7 +222,7 @@ async function addAccountSecretNumbers() {
   {
     try {
       const secret = secretNumberA.trim() + " " + secretNumberB.trim() + " " + secretNumberC.trim() + " " + secretNumberD.trim() + " " + secretNumberE.trim() + " " + secretNumberF.trim() + " " + secretNumberG.trim() + " " + secretNumberH.trim()
-      console.log(secret)
+
       const account = new Account(secret)
   
       setUserAccount(account.getAddress());
