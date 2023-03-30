@@ -1,4 +1,5 @@
 const webpack = require("webpack");
+const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 
 module.exports = function override(config) {
   const fallback = config.resolve.fallback || {};
@@ -33,5 +34,6 @@ module.exports = function override(config) {
     test: /node_modules[\\\/]https-proxy-agent[\\\/]/,
     use: "null-loader",
   });
+  config.resolve.plugins = config.resolve.plugins.filter(plugin => !(plugin instanceof ModuleScopePlugin));
   return config;
 };
