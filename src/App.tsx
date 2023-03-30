@@ -20,10 +20,11 @@ import { signer } from "./Signer";
 import { common } from "./Common";
 import { Storage } from "@ionic/storage";
 import { Account } from 'xrpl-secret-numbers'
-import "./css/cozystyles.css";
 import "./css/mvp.css";
+import "./css/cozystyles.css";
 import "./css/styles.css";
 import { SetStateAction, useEffect, useState } from "react";
+import { setFlagsFromString } from "v8";
 setupIonicReact();
 
 const App: React.FC = () => {
@@ -45,6 +46,7 @@ const App: React.FC = () => {
   const [currentTransactionText, setCurrentTransactionText] = useState("");
   const [confirmBulkTxn, setConfirmBulkTxn] = useState(false);
   const [confirmBulkSpinner, setConfirmBulkSpinner] = useState(false);
+  const [agreeToTerms, setAgreeToTerms] = useState(false);
   const [keyType, setKeyType] = useState("family_seed");
   const invokeNotification = (notifyMessage: string) => toast(notifyMessage);
   const v = new Vault();
@@ -113,6 +115,10 @@ const App: React.FC = () => {
     target: { value: SetStateAction<string> };
   }) {
     setSecretNumberH(event.target.value);
+  }
+
+  function handleAgreeToTerms(event) {
+    setAgreeToTerms(event.target.value);
   }
 
   async function unlockAccount() {
@@ -195,6 +201,12 @@ const App: React.FC = () => {
       return;
     }
 
+    if(agreeToTerms === false)
+    {
+      invokeNotification("You must agree to the terms and conditions to continue.");
+      return;
+    }
+
     try {
       let wallet = Wallet.fromSeed(seed);
       setUserAccount(wallet.address);
@@ -215,6 +227,12 @@ const App: React.FC = () => {
 async function addAccountSecretNumbers() {
   if (pw != pwConfirm) {
     invokeNotification("Password/Pin does not match.");
+    return;
+  }
+
+  if(agreeToTerms === false)
+  {
+    invokeNotification("You must agree to the terms and conditions to continue.");
     return;
   }
 
@@ -359,12 +377,11 @@ async function addAccountSecretNumbers() {
     <IonApp>
       <main className="bulk-app">
         <header>
-          <a href="" className="jittrbulk-logo">
-          <svg width="200px" xmlns="http://www.w3.org/2000/svg" id="Layer_1" viewBox="0 0 376.43 84.2"><defs></defs><path className="cls-1" d="m106.06,41.21c0-15.05,9.44-25.26,25.39-25.26,14.42,0,23.51,8.29,23.6,21.05h-16.33c-.48-5.13-3.13-7.91-7.02-7.91-4.62,0-7.65,3.95-7.65,11.99s3.03,11.99,7.65,11.99c3.86,0,6.63-2.77,7.02-7.91h16.33c-.19,12.98-9.09,21.3-23.6,21.3-15.95,0-25.39-10.21-25.39-25.26Z"/><path className="cls-1" d="m191.83,16.59h17.61v48.99h-16.71v-9.31h-.51c-2.14,6.25-7.75,9.95-15.05,9.95-10.3,0-17.06-7.65-17.09-18.37v-31.25h17.61v27.55c.03,4.85,2.58,7.78,7.02,7.78s7.18-2.93,7.14-7.78v-27.55Z"/><path className="cls-1" d="m215.86.26h17.61v24.88h.26c1.91-4.98,6.51-9.18,13.78-9.18,9.69,0,19.14,7.4,19.14,25.13s-8.8,25.13-19.26,25.13c-6.89,0-11.61-3.7-13.65-8.67h-.38v8.04h-17.48V.26Zm25,52.43c4.85,0,7.65-4.34,7.65-11.61s-2.81-11.61-7.65-11.61-7.78,4.34-7.78,11.61,2.93,11.61,7.78,11.61Z"/><path className="cls-1" d="m271.52.26h17.61v24.88h.26c1.91-4.98,6.51-9.18,13.78-9.18,9.69,0,19.14,7.4,19.14,25.13s-8.8,25.13-19.26,25.13c-6.89,0-11.61-3.7-13.65-8.67h-.38v8.04h-17.48V.26Zm25,52.43c4.85,0,7.65-4.34,7.65-11.61s-2.81-11.61-7.65-11.61-7.78,4.34-7.78,11.61,2.93,11.61,7.78,11.61Z"/><path className="cls-1" d="m326.04,82.22l3.83-12.5c4.34,1.53,7.75,1.63,8.93-1.09l.38-.89-17.22-51.15h18.37l7.91,33.93h.51l8.04-33.93h18.5l-17.86,53.07c-2.71,8.1-8.48,14.29-20.79,14.29-4.05,0-7.85-.64-10.59-1.72Z"/><path className="cls-1" d="m59.28,77.55H15.92c-8.14,0-14.77-6.62-14.77-14.77V19.43C1.16,11.28,7.78,4.66,15.92,4.66h43.36c8.14,0,14.77,6.62,14.77,14.77v43.36c0,8.14-6.62,14.77-14.77,14.77ZM15.92,13.61c-3.21,0-5.82,2.61-5.82,5.82v43.36c0,3.21,2.61,5.82,5.82,5.82h43.36c3.21,0,5.82-2.61,5.82-5.82V19.43c0-3.21-2.61-5.82-5.82-5.82H15.92Z"/><path className="cls-1" d="m37.6,53.09c-8.81,0-15.98-7.17-15.98-15.98,0-2.22,1.8-4.01,4.01-4.01s4.01,1.8,4.01,4.01c0,4.39,3.57,7.95,7.95,7.95s7.95-3.57,7.95-7.95c0-2.22,1.8-4.01,4.01-4.01s4.01,1.8,4.01,4.01c0,8.81-7.17,15.98-15.98,15.98Z"/></svg>
-          </a>
+        <svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" viewBox="0 0 376.43 84.2"><defs></defs><path d="M106.06 41.21c0-15.05 9.44-25.26 25.39-25.26 14.42 0 23.51 8.29 23.6 21.05h-16.33c-.48-5.13-3.13-7.91-7.02-7.91-4.62 0-7.65 3.95-7.65 11.99s3.03 11.99 7.65 11.99c3.86 0 6.63-2.77 7.02-7.91h16.33c-.19 12.98-9.09 21.3-23.6 21.3-15.95 0-25.39-10.21-25.39-25.26ZM191.83 16.59h17.61v48.99h-16.71v-9.31h-.51c-2.14 6.25-7.75 9.95-15.05 9.95-10.3 0-17.06-7.65-17.09-18.37V16.6h17.61v27.55c.03 4.85 2.58 7.78 7.02 7.78s7.18-2.93 7.14-7.78V16.6ZM215.86.26h17.61v24.88h.26c1.91-4.98 6.51-9.18 13.78-9.18 9.69 0 19.14 7.4 19.14 25.13s-8.8 25.13-19.26 25.13c-6.89 0-11.61-3.7-13.65-8.67h-.38v8.04h-17.48V.26Zm25 52.43c4.85 0 7.65-4.34 7.65-11.61s-2.81-11.61-7.65-11.61-7.78 4.34-7.78 11.61 2.93 11.61 7.78 11.61ZM271.52.26h17.61v24.88h.26c1.91-4.98 6.51-9.18 13.78-9.18 9.69 0 19.14 7.4 19.14 25.13s-8.8 25.13-19.26 25.13c-6.89 0-11.61-3.7-13.65-8.67h-.38v8.04h-17.48V.26Zm25 52.43c4.85 0 7.65-4.34 7.65-11.61s-2.81-11.61-7.65-11.61-7.78 4.34-7.78 11.61 2.93 11.61 7.78 11.61ZM326.04 82.22l3.83-12.5c4.34 1.53 7.75 1.63 8.93-1.09l.38-.89-17.22-51.15h18.37l7.91 33.93h.51l8.04-33.93h18.5l-17.86 53.07c-2.71 8.1-8.48 14.29-20.79 14.29-4.05 0-7.85-.64-10.59-1.72ZM59.28 77.55H15.92c-8.14 0-14.77-6.62-14.77-14.77V19.43c.01-8.15 6.63-14.77 14.77-14.77h43.36c8.14 0 14.77 6.62 14.77 14.77v43.36c0 8.14-6.62 14.77-14.77 14.77ZM15.92 13.61c-3.21 0-5.82 2.61-5.82 5.82v43.36c0 3.21 2.61 5.82 5.82 5.82h43.36c3.21 0 5.82-2.61 5.82-5.82V19.43c0-3.21-2.61-5.82-5.82-5.82H15.92Z" className="cls-1"></path><path d="M37.6 53.09c-8.81 0-15.98-7.17-15.98-15.98a4.01 4.01 0 1 1 8.02 0c0 4.39 3.57 7.95 7.95 7.95s7.95-3.57 7.95-7.95a4.01 4.01 0 1 1 8.02 0c0 8.81-7.17 15.98-15.98 15.98Z" className="cls-1"></path></svg>
         </header>
 
         <Toaster></Toaster>
+
         <div
           id="modal_confirmBulkTxn"
           className={`modal ${confirmBulkTxn ? `is-active` : ``}`}
@@ -453,7 +470,9 @@ async function addAccountSecretNumbers() {
               </div>
               <div className="bulk-cards">
                 {bulkTransactions.length === 0 ? (
-                  <div className="card is-middle">No transactions found</div>
+                  <div className="notification">
+                  No transactions found
+              </div>
                 ) : (
                   <></>
                 )}
@@ -505,31 +524,34 @@ async function addAccountSecretNumbers() {
             </div>
         ) : (
           <div className="app-screen">
-            <section className="section is-dark">
-            <header><a href="" className="jittrbulk-logo"><span>Import XRPL Account</span> </a></header>
-              <div className="field">
-                <label className="label">Key Type</label>
+            <section className="section">
+
+            <div className="field">
+                <label className="label">Key type</label>
                 <div className="control">
-                  <input
-                    type="radio"
-                    name="key_type"
-                    value="family_seed"
-                    checked={keyType === "family_seed"}
-                    onChange={onKeyTypeChange}
-                  />{" "}
-                  Family Seed
+                    <label className="radio is-custom">Family seed
+                    <input
+                        type="radio"
+                        name="storage"
+                        value="family_seed"
+                        checked={keyType === "family_seed"}
+                        onChange={onKeyTypeChange}
+                      />
+                        <span className="checkmark"></span>
+                    </label>
+                    <label className="radio is-custom">Secret numbers
+                    <input
+                        type="radio"
+                        name="storage"
+                        value="secret_numbers"
+                        checked={keyType === "secret_numbers"}
+                        onChange={onKeyTypeChange}
+                      />
+                        <span className="checkmark"></span>
+                    </label>
                 </div>
-                <div className="control">
-                  <input
-                    type="radio"
-                    name="key_type"
-                    value="secret_numbers"
-                    checked={keyType === "secret_numbers"}
-                    onChange={onKeyTypeChange}
-                  />{" "}
-                  Secret Numbers
-                </div>
-              </div>
+
+            </div>
               {keyType === "family_seed" ? (
                 <>
                   <div className="field">
@@ -562,6 +584,14 @@ async function addAccountSecretNumbers() {
                       />
                     </div>
                   </div>
+                  <div className="term-control">
+                    <label className="checkbox">
+                        <input type="checkbox" onChange={handleAgreeToTerms}  />
+                        I agree to the 
+                        <span className="checkmark"></span>
+                    </label>
+                    <a role="button" href="https://xrp.cafe/terms" target="_blank">terms</a> <label>and</label> <a role="button" href="https://xrp.cafe/privacy" target="_blank">privacy policy</a>
+                </div>
                   <div className="buttons mt mt-5">
                     <button className="button is-success" onClick={addAccount}>
                       Continue
@@ -674,6 +704,14 @@ async function addAccountSecretNumbers() {
                       />
                     </div>
                   </div>
+                  <div className="term-control">
+                    <label className="checkbox">
+                        <input type="checkbox" onChange={handleAgreeToTerms}  />
+                        I agree to the 
+                        <span className="checkmark"></span>
+                    </label>
+                    <a role="button" href="https://xrp.cafe/terms" target="_blank">terms</a><label>and</label> <a role="button" href="https://xrp.cafe/privacy" target="_blank">privacy policy</a>
+                </div>
                   <div className="buttons mt mt-5">
                     <button className="button is-success" onClick={addAccountSecretNumbers}>
                       Continue

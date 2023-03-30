@@ -355,6 +355,13 @@
   max-width: 100vw;
 }
 
+.modal-card-body p:nth-last-child(1) {
+  margin-bottom: 0;
+}
+.modal-card-body p:nth-last-child(1).content {
+  margin-bottom: 0;
+}
+
 @media only screen and (max-width: 768px) {
   .nft-item .image img {
     max-width: 26rem;
@@ -2391,49 +2398,6 @@ html .nft-item-embed .button {
   fill: var(--neutral-darkest);
 }
 
-@media only screen and (min-width: 1800px) {
-  main .big-item {
-    display: flex;
-    justify-content: center;
-    margin-block: 2rem;
-  }
-  .nft-item-hero {
-    flex: 0 0 30%;
-  }
-  .nft-item-hero .columns {
-    flex-direction: column-reverse;
-    gap: 0;
-  }
-  .nft-item-hero .columns .column:last-child {
-    display: flex;
-    flex-direction: column;
-  }
-  .nft-item-hero .columns .column:last-child > p {
-    margin: 0;
-  }
-  .nft-item-hero .columns .actions {
-    order: 1;
-    margin-top: 1.5rem;
-    margin-bottom: 0;
-  }
-  .accordions .accordion-body {
-    border-radius: 1rem;
-    display: block;
-  }
-  .accordions .toggle.button, .accordions .toggle.button:hover, .accordions .toggle.button:focus, .accordions .toggle.button:focus-visible {
-    border-color: transparent;
-    padding: 0;
-    cursor: auto;
-  }
-  .nft-item-hero {
-    border-top-left-radius: 2rem;
-    border-bottom-left-radius: 2rem;
-  }
-  #more {
-    border-top-right-radius: 2rem;
-    border-bottom-right-radius: 2rem;
-  }
-}
 .bulk-app {
   display: grid;
   gap: 1rem;
@@ -2450,8 +2414,47 @@ html .nft-item-embed .button {
   margin-top: 0.25rem;
   margin-bottom: 0;
 }
-.bulk-app .label {
+.bulk-app label, .bulk-app .label, .bulk-app .checkbox {
   color: white;
+  background: transparent;
+}
+.bulk-app label.checkbox .checkmark {
+  background-color: transparent;
+  box-shadow: 0 0 0 1px white;
+}
+.bulk-app label.checkbox:hover input ~ .checkmark {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.bulk-app label.checkbox input:checked ~ .checkmark {
+  background-color: transparent;
+}
+.bulk-app .radio {
+  margin: 0 1rem 0.5rem 0;
+}
+.bulk-app .radio:hover {
+  color: white;
+}
+.bulk-app .term-control {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.33rem;
+}
+.bulk-app .term-control a {
+  color: white;
+  text-decoration: underline;
+}
+.bulk-app .term-control a:hover {
+  opacity: 0.8;
+}
+.bulk-app .button.is-icon svg {
+  stroke: white;
+}
+.bulk-app .button.is-icon:hover {
+  opacity: 0.8;
+}
+.bulk-app .button.is-icon:hover svg {
+  opacity: 0.8;
 }
 .bulk-app .section, .bulk-app header {
   background: transparent;
@@ -2462,20 +2465,20 @@ html .nft-item-embed .button {
 .bulk-app header {
   padding: 1rem;
 }
-.bulk-app .jittrbulk-logo {
-  display: flex;
-  gap: 0.75rem;
-  letter-spacing: 1px;
-  align-items: center;
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: white;
-}
-.bulk-app .jittrbulk-logo svg {
-  fill: white;
+.bulk-app header svg {
+  display: block;
+  width: 10rem;
 }
 .bulk-app .is-truncate {
   max-width: 10rem;
+}
+
+html .bulk-app .checkbox:hover {
+  color: white;
+}
+
+.radio.is-custom .checkmark, .radio.is-custom input:checked ~ .checkmark {
+  border-color: white;
 }
 
 .bulk-cards .card {
@@ -2504,5 +2507,3 @@ html .nft-item-embed .button {
 .bulk-cards .card .price span {
   font-weight: 900;
 }
-
-/*# sourceMappingURL=mvp.css.map */
