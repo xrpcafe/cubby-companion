@@ -28,7 +28,7 @@ import { setFlagsFromString } from "v8";
 setupIonicReact();
 
 const App: React.FC = () => {
-  const [seedEncrypted, setSeedEncrypted] = useState("");
+  const [hasSeedSet, setHasSeedSet] = useState(false);
   const [seed, setSeed] = useState("");
   const [pw, setpw] = useState("");
   const [secretNumberA, setSecretNumberA] = useState("");
@@ -55,8 +55,9 @@ const App: React.FC = () => {
     const getEncryptedSeed = async () => {
       let seedEncrypted = await vault.get("xrp.cafe_seed");
 
-      if (seedEncrypted != "" && seedEncrypted != undefined) {
-        setSeedEncrypted(seedEncrypted);
+
+      if (seedEncrypted != undefined && seedEncrypted.value != "") {
+        setHasSeedSet(true);
       }
     };
 
@@ -122,7 +123,8 @@ const App: React.FC = () => {
   }
 
   async function unlockAccount() {
-    const decodedText = decrypt(seedEncrypted, pw);
+    let seedEncrypted = await vault.get("xrp.cafe_seed");
+    const decodedText = decrypt(seedEncrypted.value, pw);
     if (decodedText === undefined) {
       invokeNotification("Invalid Password");
       return;
@@ -140,7 +142,7 @@ const App: React.FC = () => {
   async function reset() {
     await vault.clear();
     setUserAccount("");
-    setSeedEncrypted("");
+    setHasSeedSet(false);
     invokeNotification("Account has been removed");
   }
 
@@ -213,7 +215,7 @@ const App: React.FC = () => {
       //Encrypt Key and store
       const encText = encrypt(seed, pwConfirm);
       await vault.set("xrp.cafe_seed", encText);
-      setSeedEncrypted(encText);
+      setHasSeedSet(true)
       setSeed("");
       setpw("");
       setPwConfirm("");
@@ -248,7 +250,7 @@ async function addAccountSecretNumbers() {
       //Encrypt Key and store
       const encText = encrypt(familySeed, pwConfirm);
       await vault.set("xrp.cafe_seed", encText);
-      setSeedEncrypted(encText);
+      setHasSeedSet(true)
       setSeed("");
       setpw("");
       setPwConfirm("");
@@ -283,7 +285,8 @@ async function addAccountSecretNumbers() {
     {   let decodedText = '';
         let wallet = null;
       try{
-        decodedText = decrypt(seedEncrypted, pw);
+        let seedEncrypted = await vault.get("xrp.cafe_seed");
+        decodedText = decrypt(seedEncrypted.value, pw);
         wallet = Wallet.fromSeed(decodedText);
       } catch(err) {
         invokeNotification("Invalid password")
@@ -505,7 +508,7 @@ async function addAccountSecretNumbers() {
               </div>
             </section>
           </div>
-        ) : seedEncrypted != "" ? (
+        ) : hasSeedSet == true ? (
 
 
 

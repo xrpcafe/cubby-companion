@@ -1,26 +1,17 @@
 import { Storage } from '@ionic/storage';
-
+import { SecureStoragePlugin } from 'capacitor-secure-storage-plugin';
 class Vault {
-    store: Storage;
-    constructor() { 
-        this.store = new Storage();
-        this.create()
-    }
-
-      async create() {
-        await this.store.create();
-      }
 
       async get(key: string) {
-        return await this.store.get(key);
+        return await SecureStoragePlugin.get({key: key});
       }
 
       async set(key: string, value: string) {
-        await this.store.set(key, value);
+        await SecureStoragePlugin.set({"key": key, "value": value});
       }
 
       async clear() {
-        await this.store.clear();
+        await SecureStoragePlugin.clear();
       }
 }
 
