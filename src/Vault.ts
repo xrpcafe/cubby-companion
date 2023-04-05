@@ -1,4 +1,3 @@
-import { Storage } from '@ionic/storage';
 import { SecureStoragePlugin } from 'capacitor-secure-storage-plugin';
 class Vault {
 
