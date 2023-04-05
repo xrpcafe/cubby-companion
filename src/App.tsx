@@ -122,6 +122,14 @@ const App: React.FC = () => {
     setAgreeToTerms(event.target.value);
   }
 
+  async function getOffers(address: string)
+  {
+    let txns = await apiServices.getBulkOffers(address);
+    if (txns.success) {
+      setBulkTransactions(txns.data);
+    }
+  }
+
   async function unlockAccount() {
     let seedEncrypted = await vault.get("xrp.cafe_seed");
     const decodedText = decrypt(seedEncrypted.value, pw);
@@ -133,10 +141,7 @@ const App: React.FC = () => {
     setUserAccount(wallet.address);
     setpw("");
     //Check for new transactions
-    let txns = await apiServices.getBulkOffers(wallet.address);
-    if (txns.success) {
-      setBulkTransactions(txns.data);
-    }
+    await getOffers(wallet.address);
   }
 
   async function reset() {
@@ -255,6 +260,8 @@ async function addAccountSecretNumbers() {
       setpw("");
       setPwConfirm("");
       invokeNotification("Wallet added successfully");
+      //Check for new transactions
+      await getOffers(account.getAddress());
     } catch (err) {
       invokeNotification("Invalid secret numbers");
     }
