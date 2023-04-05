@@ -225,6 +225,8 @@ const App: React.FC = () => {
       setpw("");
       setPwConfirm("");
       invokeNotification("Wallet added successfully");
+      //Check for new transactions
+      await getOffers(wallet.address);
     } catch (err) {
       console.log(err);
       invokeNotification("Invalid family seed");
